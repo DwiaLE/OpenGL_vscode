@@ -128,8 +128,8 @@ int main(void)
     std::cout << "Fragment" << std::endl;
     std::cout << source.FragmentSource << std::endl;
 
-    // unsigned int shader = CreateShader(vertexShader, fragmentShader);
-    // glUseProgram(shader);
+    unsigned int shader = CreateShader(source.VertexSource, source.FragmentSource);
+    glUseProgram(shader);
 
 
     /* Loop until the user closes the window */
