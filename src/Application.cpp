@@ -115,6 +115,10 @@ int main(void)
     if (!glfwInit())
         return -1;
 
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  //删掉了旧的配置，采用core profile
+
     /* Create a windowed mode window and its OpenGL context */
     window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
     if (!window)
@@ -126,7 +130,7 @@ int main(void)
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
-    glfwSwapInterval(1);    //VSync
+    glfwSwapInterval(1);    //VSync垂直同步
 
     if (glewInit() != GLEW_OK)
     {
@@ -146,10 +150,14 @@ int main(void)
         2, 3, 0
     };
 
-    unsigned int buffer;
+    unsigned int vao;       //定义vao vertex array object去存储vbo的信息
+    GLCall(glGenVertexArrays(1, &vao));
+    GLCall(glBindVertexArray(vao));
+
+    unsigned int buffer;            //绑定顶点缓存
     GLCall(glGenBuffers(1,&buffer));
     GLCall(glBindBuffer(GL_ARRAY_BUFFER,buffer));
-    GLCall(glBufferData(GL_ARRAY_BUFFER, 12* sizeof(float) , position , GL_STATIC_DRAW));
+    GLCall(glBufferData(GL_ARRAY_BUFFER, 4*2* sizeof(float) , position , GL_STATIC_DRAW));
 
     GLCall(glEnableVertexAttribArray(0));
     GLCall(glVertexAttribPointer(0, 2, GL_FLOAT ,GL_FALSE, sizeof(float) * 2, 0));
@@ -173,6 +181,13 @@ int main(void)
     ASSERT(location != 1);
     GLCall(glUniform4f(location, 0.8f, 0.3f, 0.8f, 1.0f));
 
+
+    GLCall(glBindVertexArray(0));   //取消绑定vao 下面的vbo处理就与原来的vao无关了，vao已经记录下来了，但是vao不存储信息，他只会记录配置
+    GLCall(glUseProgram(0));        //下列处理与vao无关
+    GLCall(glBindBuffer(GL_ARRAY_BUFFER,0));
+    GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0));
+
+
     float r = 0.0f;
     float increment = 0.05f;
     /* Loop until the user closes the window */
@@ -181,7 +196,14 @@ int main(void)
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
 //        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+
+        GLCall(glUseProgram(shader));          //绑定之后就可以设置uniform了
         GLCall(glUniform4f(location, r, 0.3f, 0.8f, 1.0f)); //uniform是整体的，不能让同一时间画出来的正方形一半是一种颜色另一半是另外一种
+        
+        GLCall(glBindVertexArray(vao)); //每次需要画图就调用vao的配置信息来进行画图
+        GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,ibo));
+
         GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 
         if(r > 1.0f)
