@@ -5,10 +5,12 @@
 #include <string>
 #include <sstream>
 
-#define ASSERT(x) if(!(x)) __builtin_trap();
-#define GLCall(x) GLClearError(); \
-    x;\
-    ASSERT(GLLogCall(#x, __FILE__, __LINE__))
+#define ASSERT(x) do { if (!(x)) __builtin_trap(); } while (0)
+#define GLCall(x) do { \
+    GLClearError(); \
+    x; \
+    ASSERT(GLLogCall(#x, __FILE__, __LINE__)); \
+} while (0)
 
 static void GLClearError()
 {
@@ -88,7 +90,8 @@ static unsigned int CompileShader(unsigned int type,const std::string& source )
 }
 static unsigned int CreateShader(const std::string& vertexShader , const std::string& fragmentShader)
 {
-    GLCall(unsigned int program = glCreateProgram());
+    unsigned int program = 0;
+    GLCall(program = glCreateProgram());
     unsigned int vs = CompileShader(GL_VERTEX_SHADER , vertexShader);
     unsigned int fs = CompileShader(GL_FRAGMENT_SHADER , fragmentShader);
 
