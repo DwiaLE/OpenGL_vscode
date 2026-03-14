@@ -8,9 +8,9 @@
                 "-fdiagnostics-color=always",
                 "-std=c++14",
                 "-g",
-                "${file}",
+                "${workspaceFolder}\\src\\*.cpp",
                 "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                "${workspaceFolder}\\src\\${fileBasenameNoExtension}.exe",
                 "-I${workspaceFolder}\\Dependencies\\GLFW\\include",
                 "-L${workspaceFolder}\\Dependencies\\GLFW\\lib",
                 "-I${workspaceFolder}\\Dependencies\\GLEW\\include",
@@ -23,7 +23,7 @@
 
             ],
             "options": {
-                "cwd": "${fileDirname}"
+                "cwd": "${workspaceFolder}"
             },
             "problemMatcher": [
                 "$gcc"
