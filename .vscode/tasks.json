@@ -1,32 +1,48 @@
 {
     "tasks": [
         {
-            "type": "cppbuild",
-            "label": "C/C++: g++.exe 生成活动文件",
-            "command": "C:\\MinGW64\\bin\\g++.exe",
+            "type": "shell",
+            "label": "C/C++: cl.exe 生成 Application",
+            "command": "call",
             "args": [
-                "-fdiagnostics-color=always",
-                "-std=c++14",
-                "-g",
-                "${workspaceFolder}\\src\\*.cpp",
-                "-o",
-                "${workspaceFolder}\\src\\${fileBasenameNoExtension}.exe",
-                "-I${workspaceFolder}\\Dependencies\\GLFW\\include",
-                "-L${workspaceFolder}\\Dependencies\\GLFW\\lib",
-                "-I${workspaceFolder}\\Dependencies\\GLEW\\include",
-                "-L${workspaceFolder}\\Dependencies\\GLEW\\lib\\Release\\x64",
-                "-lglew32s",
-                "-lglfw3",
-                "-lopengl32",
-                "-lgdi32",
-                "-DGLEW_STATIC"
-
+                "\"G:\\Visual studio\\software\\VC\\Auxiliary\\Build\\vcvars64.bat\"",
+                "&&",
+                "cl",
+                "/std:c++17",
+                "/utf-8",
+                "/MD",
+                "/Zi",
+                "/EHsc",
+                "/I",
+                "\"${workspaceFolder}\\Dependencies\\GLFW\\include\"",
+                "/I",
+                "\"${workspaceFolder}\\Dependencies\\GLEW\\include\"",
+                "/D",
+                "GLEW_STATIC",
+                "\"${workspaceFolder}\\src\\*.cpp\"",
+                "/link",
+                "/OUT:\"${workspaceFolder}\\src\\Application.exe\"",
+                "/LIBPATH:\"${workspaceFolder}\\Dependencies\\GLFW\\lib-vc2022\"",
+                "/LIBPATH:\"${workspaceFolder}\\Dependencies\\GLEW\\lib\\Release\\x64\"",
+                "glfw3.lib",
+                "glew32s.lib",
+                "opengl32.lib",
+                "gdi32.lib",
+                "user32.lib",
+                "shell32.lib"
             ],
             "options": {
-                "cwd": "${workspaceFolder}"
+                "cwd": "${workspaceFolder}",
+                "shell": {
+                    "executable": "C:\\Windows\\System32\\cmd.exe",
+                    "args": [
+                        "/d",
+                        "/c"
+                    ]
+                }
             },
             "problemMatcher": [
-                "$gcc"
+                "$msCompile"
             ],
             "group": {
                 "kind": "build",

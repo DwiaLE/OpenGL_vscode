@@ -1,38 +1,22 @@
 {
     "configurations": [
         {
-            "name": "Win32",
+            "name": "MSVC x64",
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/Dependencies/GLFW/include",
-                "${vcpkgRoot}/x64-windows/include"
+                "${workspaceFolder}/Dependencies/GLEW/include"
             ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
-                "_UNICODE"
+                "_UNICODE",
+                "GLEW_STATIC"
             ],
-            "compilerPath": "D:/msys64/ucrt64/bin/g++.exe",
+            "compilerPath": "G:/Visual studio/software/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe",
             "cStandard": "c17",
-            "cppStandard": "c++23",
-            "intelliSenseMode": "gcc-x64"
-        },
-        {
-            "name": "C++",
-            "includePath": [
-                "${workspaceFolder}/**",
-                "${workspaceFolder}/Dependencies/GLFW/include",
-                "${vcpkgRoot}/x64-windows/include"
-            ],
-            "defines": [
-                "_DEBUG",
-                "UNICODE",
-                "_UNICODE"
-            ],
-            "compilerPath": "C:\\MinGW64\\bin\\g++.exe",
-            "cStandard": "c17",
-            "cppStandard": "gnu++17",
-            "intelliSenseMode": "windows-gcc-x64"
+            "cppStandard": "c++17",
+            "intelliSenseMode": "windows-msvc-x64"
         }
     ],
     "version": 4
