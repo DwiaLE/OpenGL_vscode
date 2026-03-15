@@ -7,6 +7,7 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "Renderer.h"
+#include "VertexArray.h"
 struct ShaderProgramSources
 {
     std::string VertexSource;
@@ -130,14 +131,13 @@ int main(void)
         2, 3, 0
     };
 
-    unsigned int vao;       //定义vao vertex array object去存储vbo的信息
-    GLCall(glGenVertexArrays(1, &vao));
-    GLCall(glBindVertexArray(vao));
-
+    VertexArray va;
     VertexBuffer vb(position, 4* 2 *sizeof(float));
 
-    GLCall(glEnableVertexAttribArray(0));
-    GLCall(glVertexAttribPointer(0, 2, GL_FLOAT ,GL_FALSE, sizeof(float) * 2, 0));
+    VertexBufferLayout layout;
+    layout.Push<float>(2);
+    va.AddBuffer(vb, layout);
+
 
 
     IndexBuffer ib(indices, 6);
@@ -158,7 +158,7 @@ int main(void)
     GLCall(glUniform4f(location, 0.8f, 0.3f, 0.8f, 1.0f));
 
 
-    GLCall(glBindVertexArray(0));   //取消绑定vao 下面的vbo处理就与原来的vao无关了，vao已经记录下来了，但是vao不存储信息，他只会记录配置
+    va.UnBind();
     GLCall(glUseProgram(0));        //下列处理与vao无关
     GLCall(glBindBuffer(GL_ARRAY_BUFFER,0));
     GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0));
@@ -177,7 +177,7 @@ int main(void)
         GLCall(glUseProgram(shader));          //绑定之后就可以设置uniform了
         GLCall(glUniform4f(location, r, 0.3f, 0.8f, 1.0f)); //uniform是整体的，不能让同一时间画出来的正方形一半是一种颜色另一半是另外一种
         
-        GLCall(glBindVertexArray(vao)); //每次需要画图就调用vao的配置信息来进行画图
+        va.Bind();
         ib.Bind();
 
         GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
